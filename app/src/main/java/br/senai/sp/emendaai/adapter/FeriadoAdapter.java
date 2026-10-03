@@ -1,5 +1,7 @@
 package br.senai.sp.emendaai.adapter;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import br.senai.sp.emendaai.DetalheFeriadoActivity;
 import br.senai.sp.emendaai.R;
 import br.senai.sp.emendaai.model.Feriado;
 import br.senai.sp.emendaai.util.Datas;
 
 public class FeriadoAdapter extends RecyclerView.Adapter<FeriadoAdapter.FeriadoViewHolder> {
-    private List<Feriado> listaFeriado;
-    public FeriadoAdapter(List<Feriado> listaFeriado) {
-        this.listaFeriado = listaFeriado;
+    public interface Evento {
+        void detalhe(Feriado feriado);
     }
 
+    private Evento acaoEvento;
+    private List<Feriado> listaFeriado;
+
+    public FeriadoAdapter(List<Feriado> listaFeriado, Evento acaoEvento) {
+        this.listaFeriado =listaFeriado;
+        this.acaoEvento = acaoEvento;
+}
     @NonNull
     @Override
     public FeriadoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,6 +53,12 @@ public class FeriadoAdapter extends RecyclerView.Adapter<FeriadoAdapter.FeriadoV
         } else {
             holder.txtSelo.setVisibility(View.GONE);
         }
+
+        //clique no card
+        holder.itemView.setOnClickListener(v -> {
+            Log.e("APP", item.toString());
+            acaoEvento.detalhe(item);
+        });
     }
 
     @Override
